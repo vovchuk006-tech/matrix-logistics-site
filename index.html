@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MATRIX — Імпорт з Китаю під повним контролем</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ ФОН ЗІ СВІТІННЯМИ (ПАРАЛЛАКС) ============ -->
+<div class="bg-glows" id="bgGlows">
+  <canvas class="matrix-rain" id="matrixRain"></canvas>
+  <div class="glow glow-top"></div>
+  <div class="glow glow-bottom"></div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="header">
+  <div class="container header-inner">
+    <button class="theme-toggle" id="themeToggle" aria-label="Перемкнути тему">
+      <svg class="theme-icon icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg class="theme-icon icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+    <a href="#" class="logo">
+      <div class="logo-wrap">
+        <img src="images/logo.png" alt="MATRIX" class="logo-white" />
+        <img src="images/logo-black.png" alt="MATRIX" class="logo-black" />
+        <span class="logo-sub" aria-label="logistics">
+          <span>l</span><span>o</span><span>g</span><span>i</span><span>s</span><span>t</span><span>i</span><span>c</span><span>s</span>
+        </span>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="#tariffs" class="nav-link">Види Доставки <span class="caret">▾</span></a>
+      <a href="#services" class="nav-link">Послуги <span class="caret">▾</span></a>
+      <a href="#import" class="nav-link">Імпорт</a>
+      <a href="#partners" class="nav-link">Партнерам</a>
+    </nav>
+    <a href="#kabinet" class="btn-outline">
+      <span class="ico">⬚</span> Увійти в кабінет
+    </a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container hero-inner">
+    <h1 class="hero-title">Доставка з Китаю в Україну</h1>
+    <h2 class="hero-subtitle">
+      Від фабрики <span class="accent">до вашого складу</span>
+    </h2>
+    <p class="hero-desc">
+      За допомоги нашої платформи, ви бачите вантаж, розумієте витрати та<br>
+      контролюєте кожен етап — без залежності від менеджерів.
+    </p>
+    <button type="button" class="btn-primary" onclick="openContactModal()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      Зв'язатись з нами
+    </button>
+
+    <!-- Карта світу (3D глобус на Three.js) -->
+    <div class="world-map" id="worldMap">
+      <div class="map-stats">
+        <div class="stat"><div class="stat-num">34</div><div class="stat-lbl">пакуються<br>на складі</div></div>
+        <div class="stat"><div class="stat-num">118</div><div class="stat-lbl">у дорозі</div></div>
+        <div class="stat"><div class="stat-num">12</div><div class="stat-lbl">очікують<br>відправку</div></div>
+        <div class="stat"><div class="stat-num">7</div><div class="stat-lbl">проходять<br>митницю</div></div>
+      </div>
+
+      <canvas id="globeCanvas" class="globe-canvas"></canvas>
+
+      <div class="map-footer">
+        <span>✈ 7-12 днів</span>
+        <span>⛴ 15-20 днів</span>
+        <span>🚆 40-42 дні</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ЯК ПРАЦЮЄ ============ -->
+<section class="how-it-works">
+  <div class="container">
+    <div class="how-card">
+      <h2 class="section-title">Як працює доставка з MATRIX ?</h2>
+      <p class="section-desc">
+        Надійна доставка від 30 кг із повним супроводом: митне оформлення,<br>
+        документи та контроль на кожному етапі
+      </p>
+
+      <div class="how-grid">
+        <div class="how-steps">
+          <div class="step active" data-step="1">
+            <span class="step-num">01.</span> Ви залишаєте заявку
+          </div>
+          <div class="step" data-step="2">
+            <span class="step-num">02.</span> Обираєте спосіб доставки
+          </div>
+          <div class="step" data-step="3">
+            <span class="step-num">03.</span> Контроль транспортування
+          </div>
+          <div class="step" data-step="4">
+            <span class="step-num">04.</span> Отримуєте вантаж
+          </div>
+        </div>
+
+        <div class="how-illustration">
+          <div class="illustration-circle">
+            <div class="illustration-inner">
+              <div class="env-icon">
+                <div class="env-base"></div>
+                <div class="env-flap"></div>
+                <div class="env-bell">🔔</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="how-content">
+          <div class="how-pane active" data-pane="1">
+            <h3><span class="accent">#1</span> Ви залишаєте заявку</h3>
+            <p>Менеджер зв'яжеться з вами протягом 30 хвилин.</p>
+            <p class="strong">Ми:</p>
+            <ul>
+              <li>уточнимо параметри вантажу</li>
+              <li>розрахуємо точну вартість</li>
+            </ul>
+            <button type="button" class="btn-primary small" onclick="openContactModal('callback')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              Залишити заявку
+            </button>
+          </div>
+
+          <div class="how-pane" data-pane="2">
+            <h3><span class="accent">#2</span> Обираєте спосіб доставки</h3>
+            <p>Авіа, морська або залізнична — підбираємо оптимальний варіант.</p>
+            <p class="strong">Враховуємо:</p>
+            <ul>
+              <li>терміни та бюджет</li>
+              <li>тип вантажу</li>
+            </ul>
+            <a href="#tariffs" class="btn-primary small">Дивитись тарифи</a>
+          </div>
+
+          <div class="how-pane" data-pane="3">
+            <h3><span class="accent">#3</span> Контроль транспортування</h3>
+            <p>У реальному часі бачите де ваш вантаж та на якому етапі.</p>
+            <p class="strong">Доступ через:</p>
+            <ul>
+              <li>особистий кабінет</li>
+              <li>Telegram-бот</li>
+            </ul>
+            <a href="#calculator" class="btn-primary small">Розрахувати</a>
+          </div>
+
+          <div class="how-pane" data-pane="4">
+            <h3><span class="accent">#4</span> Отримуєте вантаж</h3>
+            <p>Доставка на ваш склад або самовивіз з нашого складу.</p>
+            <p class="strong">Підготуємо:</p>
+            <ul>
+              <li>всі необхідні документи</li>
+              <li>звіт по доставці</li>
+            </ul>
+            <a href="#contact" class="btn-primary small">Замовити доставку</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ТАРИФИ ============ -->
+<section class="tariffs" id="tariffs">
+  <div class="container">
+    <h2 class="section-title light">Тарифи на перевезення</h2>
+    <p class="section-desc light">
+      Надійна доставка від 30 кг із повним супроводом: митне оформлення,<br>
+      документи та контроль на кожному етапі
+    </p>
+
+    <div class="tariffs-grid">
+      <a href="#" class="tariff-card tariff-air">
+        <img class="tariff-bg" src="images/air-delivery.png" alt="Авіадоставка">
+        <div class="tariff-overlay"></div>
+        <div class="tariff-content">
+          <div class="tariff-header">
+            <h3>Авіадоставка</h3>
+            <div class="tariff-meta"><span>від $9.5/кг</span></div>
+          </div>
+          <div class="tariff-details">
+            <ul>
+              <li>14–21 день у дорозі</li>
+              <li>6 відправлень на тиждень (Пн–Пт, Нд)</li>
+              <li>мінімальна вага — 5 кг</li>
+              <li>страхова вартість вантажу від 150 €</li>
+            </ul>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="tariff-card tariff-sea">
+        <img class="tariff-bg" src="images/sea-delivery.png" alt="Морська доставка">
+        <div class="tariff-overlay"></div>
+        <div class="tariff-content">
+          <div class="tariff-header">
+            <h3>Морська доставка</h3>
+            <div class="tariff-meta"><span>від $2/кг</span></div>
+          </div>
+          <div class="tariff-details">
+            <ul>
+              <li>55–65 днів у дорозі</li>
+              <li>6 відправлень на тиждень (Пн–Пт, Нд)</li>
+              <li>мінімальна вага — 100 кг</li>
+              <li>страхова вартість вантажу від 150 €</li>
+            </ul>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="tariff-card tariff-rail">
+        <img class="tariff-bg" src="images/rail-delivery.png" alt="Залізнична доставка">
+        <div class="tariff-overlay"></div>
+        <div class="tariff-content">
+          <div class="tariff-header">
+            <h3>Залізнична доставка</h3>
+            <div class="tariff-meta"><span>від $3.5/кг</span></div>
+          </div>
+          <div class="tariff-details">
+            <ul>
+              <li>30–45 днів у дорозі</li>
+              <li>6 відправлень на тиждень (Пн–Пт, Нд)</li>
+              <li>мінімальна вага — 10 кг</li>
+              <li>страхова вартість вантажу від 150 €</li>
+            </ul>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ КАЛЬКУЛЯТОР ============ -->
+<section class="calculator-section" id="calculator">
+  <div class="container">
+    <h2 class="section-title dark">Розрахувати вартість</h2>
+
+    <div class="calculator">
+      <div class="calc-grid">
+        <div class="calc-col-country">
+          <h4 class="calc-h">Країна</h4>
+          <label class="calc-label">Звідки</label>
+          <div class="select-wrap">
+            <select id="fromCountry">
+              <option value="">Оберіть країну</option>
+              <option value="cn">🇨🇳 Китай</option>
+              <option value="hk">🇭🇰 Гонконг</option>
+              <option value="tw">🇹🇼 Тайвань</option>
+            </select>
+          </div>
+          <label class="calc-label">Куди</label>
+          <div class="select-wrap">
+            <select id="toCountry">
+              <option value="">Оберіть країну</option>
+              <option value="ua">🇺🇦 Україна</option>
+              <option value="pl">🇵🇱 Польща</option>
+              <option value="md">🇲🇩 Молдова</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="calc-col-params">
+          <h4 class="calc-h">Розміри та вага посилки</h4>
+          <div class="params-row">
+            <div class="param">
+              <label class="calc-label">Довжина, см</label>
+              <input type="number" min="0" placeholder="0 см" id="length" />
+            </div>
+            <div class="param">
+              <label class="calc-label">Ширина, см</label>
+              <input type="number" min="0" placeholder="0 см" id="width" />
+            </div>
+            <div class="param">
+              <label class="calc-label">Висота, см</label>
+              <input type="number" min="0" placeholder="0 см" id="height" />
+            </div>
+          </div>
+          <div class="params-row">
+            <div class="param">
+              <label class="calc-label">Вага, кг</label>
+              <input type="number" min="0" placeholder="0 кг" id="weight" />
+            </div>
+            <div class="param">
+              <label class="calc-label">Кількість місць</label>
+              <div class="select-wrap">
+                <select id="quantity">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-result" id="calcResult"></div>
+
+      <button class="btn-primary calc-btn" onclick="calculatePrice()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/></svg>
+        Розрахувати вартість
+      </button>
+      <a href="#forbidden" class="calc-link">Список <u>заборонених</u> <u>речей</u></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ЧОМУ ДОВІРЯЮТЬ ============ -->
+<section class="trust">
+  <div class="container">
+    <h2 class="section-title light">Чому довіряють</h2>
+    <p class="section-desc light">
+      Нам довіряють, тому що кожен етап імпорту прозорий, керований і фінансово<br>
+      обґрунтований.
+    </p>
+
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-text">
+          <h3>30 років досвіду</h3>
+          <p class="accent">30 000 000+ км доставки</p>
+          <p>Ми знаємо всі нюанси доставки з Китаю та будуємо процеси так, щоб ваш вантаж рухався швидко, безпечно і прогнозовано.</p>
+        </div>
+        <div class="trust-illustration ill-years">
+          <div class="circle-orange"></div>
+          <div class="box-3d">📦</div>
+          <div class="pin-3d">📍</div>
+        </div>
+      </div>
+
+      <div class="trust-card">
+        <div class="trust-text">
+          <h3>Ціна відповідає швидкості</h3>
+          <p class="accent">Прозора вартість і реальні терміни.</p>
+          <p>Авіа, море або залізниця — ви обираєте оптимальний баланс швидкості та бюджету, а ми гарантуємо виконання.</p>
+        </div>
+      </div>
+
+      <div class="trust-card">
+        <div class="trust-text">
+          <h3>Ми — логістичне ательє</h3>
+          <p class="accent">Індивідуальні рішення для будь-якого вантажу.</p>
+          <p>Від стандартних поставок до складних логістичних задач — ми створюємо маршрут і формат доставки саме під ваш бізнес.</p>
+        </div>
+      </div>
+
+      <div class="trust-card">
+        <div class="trust-text">
+          <h3>Платформа та чат-бот</h3>
+          <p class="accent">Контроль доставки в реальному часі.</p>
+          <p>У нашій платформі та чат-боті ви бачите статус вантажу, документи та всі етапи перевезення — без дзвінків і очікувань.</p>
+        </div>
+        <div class="trust-illustration ill-chat">
+          <div class="circle-orange"></div>
+          <div class="chat-bubble bubble-1">💬</div>
+          <div class="chat-bubble bubble-2">🤖</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ЗАБОРОНЕНІ + ФОРМА ============ -->
+<section class="info-form-section" id="forbidden">
+  <div class="container">
+    <div class="info-form-grid">
+
+      <!-- Ліва колонка -->
+      <div class="info-col">
+        <a href="#" class="info-card big info-forbidden">
+          <svg class="info-bg" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="boxBg" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#2a2520"/>
+                <stop offset="100%" stop-color="#0a0808"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="320" fill="url(#boxBg)"/>
+            <!-- Коробки на фоні -->
+            <g fill="#5a4030">
+              <rect x="20" y="180" width="80" height="70" rx="2" transform="rotate(-3 60 215)"/>
+              <rect x="280" y="190" width="90" height="80" rx="2" transform="rotate(4 325 230)"/>
+              <rect x="100" y="220" width="100" height="80" rx="2"/>
+              <rect x="220" y="225" width="80" height="80" rx="2"/>
+            </g>
+            <g fill="#3a2818">
+              <rect x="50" y="250" width="60" height="50" rx="2"/>
+              <rect x="180" y="255" width="50" height="45" rx="2"/>
+              <rect x="310" y="260" width="55" height="50" rx="2"/>
+            </g>
+            <!-- Центральна велика коробка -->
+            <g transform="translate(140, 100)">
+              <rect x="0" y="0" width="120" height="120" rx="3" fill="#8a6045"/>
+              <rect x="0" y="0" width="120" height="10" fill="#6a4530"/>
+              <line x1="60" y1="0" x2="60" y2="120" stroke="#5a3520" stroke-width="2"/>
+              <line x1="0" y1="60" x2="120" y2="60" stroke="#5a3520" stroke-width="1.5"/>
+            </g>
+            <!-- Знак заборони -->
+            <g transform="translate(200, 160)">
+              <circle r="48" fill="#e02020" stroke="#fff" stroke-width="4"/>
+              <rect x="-32" y="-6" width="64" height="12" fill="#fff" transform="rotate(-45)"/>
+            </g>
+          </svg>
+          <div class="info-overlay"></div>
+          <div class="info-card-content">
+            <h3>Заборонені посилки</h3>
+          </div>
+          <div class="info-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 7l10 10M17 7v10H7"/></svg>
+          </div>
+        </a>
+
+        <div class="small-cards">
+          <a href="#" class="info-card small">
+            <div class="small-icon">🏭</div>
+            <h4>Наші склади</h4>
+            <div class="info-arrow">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 7l10 10M17 7v10H7"/></svg>
+            </div>
+          </a>
+          <a href="#calculator" class="info-card small">
+            <div class="small-icon">🧮</div>
+            <h4>Як розрахувати</h4>
+            <div class="info-arrow">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 7l10 10M17 7v10H7"/></svg>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Права колонка - форма -->
+      <div class="contact-form" id="contact">
+        <h3>Виникли запитання?</h3>
+        <p>Заповніть форму і наші професіонали<br>зв'яжуться з вами</p>
+
+        <form id="contactForm" onsubmit="submitForm(event)">
+          <input type="text" name="name" placeholder="Ваше ім'я*" required />
+          <input type="tel" name="phone" placeholder="Ваш телефон*" required />
+          <input type="email" name="email" placeholder="Ваш E-mail" />
+          <textarea name="comment" placeholder="Залишити коментар" rows="3"></textarea>
+
+          <label class="checkbox-wrap">
+            <input type="checkbox" required />
+            <span>погоджуюсь з використанням особистих даних та прочитав(ла) <a href="#">політику конфіденційності</a></span>
+          </label>
+
+          <button type="submit" class="btn-primary submit-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            Надіслати
+          </button>
+        </form>
+
+        <div id="formSuccess" class="form-success">
+          ✓ Дякуємо! Ми зв'яжемось з вами найближчим часом.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-logo">
+      <img src="images/logo.png" alt="MATRIX" class="logo-white" />
+      <img src="images/logo-black.png" alt="MATRIX" class="logo-black" />
+    </div>
+
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-row">
+          <span class="footer-ico">📞</span>
+          <div>
+            <div>+38 (044) 11 222 33</div>
+            <div>+38 (063) 11 222 33</div>
+            <div>+38 (066) 11 222 33</div>
+            <div>+38 (099) 11 222 33</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-row">
+          <span class="footer-ico">📍</span>
+          <div>
+            <div><strong>Україна, м. Київ</strong></div>
+            <div>вул. Хрещатик, 1</div>
+            <br>
+            <div><strong>Китай, м. Гуанчжоу</strong></div>
+            <div>вул. Цуалмбмд, 214</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-row">
+          <span class="footer-ico">✉</span>
+          <div>matrix@gmail.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ МОДАЛКА КОНТАКТІВ ============ -->
+<div class="contact-modal" id="contactModal" onclick="closeContactModal(event)">
+  <div class="contact-modal__box" onclick="event.stopPropagation()">
+    <button class="contact-modal__close" onclick="closeContactModal()" aria-label="Закрити">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <!-- ПАНЕЛЬ 1: вибір месенджера -->
+    <div class="contact-modal__panel is-active" data-panel="choose">
+      <h3 class="contact-modal__title">Зв'яжіться з нами</h3>
+      <p class="contact-modal__desc">Оберіть зручний месенджер</p>
+
+      <div class="contact-modal__links">
+        <!-- WhatsApp -->
+        <a href="https://wa.me/PHONE_NUMBER_HERE" target="_blank" rel="noopener" class="contact-link contact-link--whatsapp">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+          </svg>
+          <div class="contact-link__text">
+            <div class="contact-link__name">WhatsApp</div>
+            <div class="contact-link__hint">Швидка відповідь</div>
+          </div>
+        </a>
+
+        <!-- Telegram -->
+        <a href="https://t.me/TELEGRAM_USERNAME_HERE" target="_blank" rel="noopener" class="contact-link contact-link--telegram">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0Zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.87 4.326-2.962-.924c-.643-.204-.658-.643.135-.953l11.566-4.458c.535-.196 1.006.128.832.938Z"/>
+          </svg>
+          <div class="contact-link__text">
+            <div class="contact-link__name">Telegram</div>
+            <div class="contact-link__hint">Напишіть нам у Telegram</div>
+          </div>
+        </a>
+
+        <!-- Подзвонити (МОБІЛЬНА версія — лише на смартфонах) -->
+        <a href="tel:+PHONE_NUMBER_HERE" class="contact-link contact-link--phone">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+          <div class="contact-link__text">
+            <div class="contact-link__name">Подзвонити</div>
+            <div class="contact-link__hint">Прямий дзвінок</div>
+          </div>
+        </a>
+
+        <!-- Залишити заявку (ДЕСКТОПНА версія) -->
+        <button type="button" class="contact-link contact-link--callback" onclick="switchContactPanel('callback')">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <div class="contact-link__text">
+            <div class="contact-link__name">Залишити заявку</div>
+            <div class="contact-link__hint">Передзвонимо протягом 15 хв</div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ПАНЕЛЬ 2: форма замовлення дзвінка -->
+    <div class="contact-modal__panel" data-panel="callback">
+      <button type="button" class="contact-modal__back" onclick="switchContactPanel('choose')" aria-label="Назад">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Назад
+      </button>
+      <h3 class="contact-modal__title">Залишити заявку</h3>
+
+      <form class="callback-form" onsubmit="submitCallback(event)">
+        <label class="callback-field">
+          <span class="callback-field__label">Ваше ім'я</span>
+          <input type="text" name="name" placeholder="Олександр" required>
+        </label>
+        <label class="callback-field">
+          <span class="callback-field__label">Номер телефону</span>
+          <input type="tel" name="phone" placeholder="+380 __ ___ __ __" required>
+        </label>
+        <label class="callback-field">
+          <span class="callback-field__label">Email</span>
+          <input type="email" name="email" placeholder="you@example.com">
+        </label>
+        <label class="callback-field">
+          <span class="callback-field__label">Коментар</span>
+          <textarea name="comment" rows="3" placeholder="Опишіть ваше питання або вантаж"></textarea>
+        </label>
+        <button type="submit" class="callback-submit">
+          Залишити заявку
+        </button>
+        <div class="callback-success" id="callbackSuccess">
+          ✓ Заявку прийнято! Передзвонимо найближчим часом.
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="globe.js"></script>
+</body>
+</html>
