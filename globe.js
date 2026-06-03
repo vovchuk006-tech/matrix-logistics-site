@@ -532,8 +532,13 @@
 
     updateVehicles(dt);
     renderer.render(scene, camera);
+    if (!canvasShown) {           // показуємо полотно лише після першого кадру
+      canvasShown = true;
+      renderer.domElement.style.opacity = '1';
+    }
     updateLabels();
     requestAnimationFrame(animate);
   }
+  let canvasShown = false;
   requestAnimationFrame(animate);
 })();
