@@ -57,21 +57,36 @@
 
   // ---------- Земля ----------
   const earthGeo = new THREE.SphereGeometry(R, 192, 192);
-  const earthMat = new THREE.MeshBasicMaterial({ color: 0x16335c });
+  // Чорний прозорий — невидимий поки тeкстура не загрузилась (не показуємо синю заглушку)
+  const earthMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
   const earth = new THREE.Mesh(earthGeo, earthMat);
   globe.add(earth);
 
-  // Текстура нічної Землі: пробуємо CDN, інакше — процедурна
+  // Плавна поява кулі коли текстура готова
+  function fadeInEarth() {
+    if (earthMat.opacity < 1) {
+      earthMat.opacity = Math.min(1, earthMat.opacity + 0.05);
+      requestAnimationFrame(fadeInEarth);
+    }
+  }
+
+  // Текстура нічної Землі: пробуємо CDN (легші — першими), інакше — процедурна
   const texLoader = new THREE.TextureLoader();
   texLoader.setCrossOrigin('anonymous');
   const TEX_URLS = [
-    'https://www.solarsystemscope.com/textures/download/8k_earth_nightmap.jpg', // 8K
-    'https://cdn.jsdelivr.net/gh/turban/webgl-earth@master/images/5_night_16k.jpg',
-    'https://unpkg.com/three-globe/example/img/earth-night.jpg',  // 2K fallback
-    'https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg'
+    'https://unpkg.com/three-globe/example/img/earth-night.jpg',                      // ~2K, легка — швидко
+    'https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg',           // дзеркало
+    'https://www.solarsystemscope.com/textures/download/8k_earth_nightmap.jpg',       // 8K — найкраща якість
+    'https://cdn.jsdelivr.net/gh/turban/webgl-earth@master/images/5_night_16k.jpg'    // 16K
   ];
   function tryTexture(i) {
-    if (i >= TEX_URLS.length) { earthMat.map = makeProceduralTexture(); earthMat.color.set(0xffffff); earthMat.needsUpdate = true; return; }
+    if (i >= TEX_URLS.length) {
+      earthMat.map = makeProceduralTexture();
+      earthMat.color.set(0xffffff);
+      earthMat.needsUpdate = true;
+      fadeInEarth();
+      return;
+    }
     texLoader.load(
       TEX_URLS[i],
       (tex) => {
@@ -81,7 +96,10 @@
         tex.magFilter = THREE.LinearFilter;
         tex.generateMipmaps = true;
         tex.needsUpdate = true;
-        earthMat.map = tex; earthMat.color.set(0xffffff); earthMat.needsUpdate = true;
+        earthMat.map = tex;
+        earthMat.color.set(0xffffff);
+        earthMat.needsUpdate = true;
+        fadeInEarth();
       },
       undefined,
       () => tryTexture(i + 1)
