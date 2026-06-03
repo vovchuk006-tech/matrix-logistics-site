@@ -158,7 +158,7 @@
   // Завантажуємо збережену тему (за замовчуванням — світла)
   let savedTheme = 'light';
   try {
-    savedTheme = localStorage.getItem('matrix-theme') || 'light';
+    savedTheme = localStorage.getItem('matrix-theme') || 'dark';
   } catch(e) {}
   document.documentElement.setAttribute('data-theme', savedTheme);
 
